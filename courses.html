@@ -1,0 +1,2658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microlearning Courses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --bg-card: #ffffff;
+      --sage: #9cb4a0;
+      --sage-light: #e8f0e9;
+      --lilac: #b8b0d0;
+      --lilac-light: #eeeaf5;
+      --dusty-pink: #d4a5a5;
+      --dusty-pink-light: #f5e8e8;
+      --text: #2d3436;
+      --text-light: #636e72;
+      --text-muted: #b2bec3;
+      --border: #e8e6e3;
+      --shadow: rgba(0,0,0,0.04);
+      --shadow-md: rgba(0,0,0,0.08);
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== HOMEPAGE ===== */
+    .home-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .home-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .home-header h1 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .home-header p {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      font-weight: 400;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+      gap: 2rem;
+      justify-content: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .course-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 20px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px var(--shadow-md);
+    }
+
+    .course-card.sage { border-top: 4px solid var(--sage); }
+    .course-card.lilac { border-top: 4px solid var(--lilac); }
+
+    .course-card .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .course-card h3 {
+      font-size: 1.35rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .course-card .tagline {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .course-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .meta-tag {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 500;
+      background: var(--bg);
+      color: var(--text-light);
+    }
+
+    .course-card.sage .meta-tag { background: var(--sage-light); color: #5a7a5e; }
+    .course-card.lilac .meta-tag { background: var(--lilac-light); color: #6b5f8a; }
+
+    .course-outcome {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== COURSE PLAYER ===== */
+    .course-player {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+
+    .sidebar {
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--sage); }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .progress-container {
+      margin-top: 1rem;
+    }
+
+    .progress-bar-bg {
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--sage);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0.5rem 0;
+    }
+
+    .nav-item {
+      padding: 0.875rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .nav-item:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: var(--sage-light);
+      color: var(--sage);
+      font-weight: 500;
+    }
+
+    .nav-item.completed .nav-status {
+      background: var(--sage);
+      color: white;
+    }
+
+    .nav-status {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    /* ===== CONTENT AREA ===== */
+    .content-area {
+      padding: 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .module-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .module-breadcrumb {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .module-title {
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .module-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    .content-block {
+      margin-bottom: 2rem;
+    }
+
+    .content-block h3 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .content-block p {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .content-block ul, .content-block ol {
+      color: var(--text-light);
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .content-block li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    /* ===== LEARNING OBJECTIVES ===== */
+    .learning-objectives {
+      background: var(--sage-light);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .learning-objectives h4 {
+      color: #5a7a5e;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .learning-objectives ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .learning-objectives li {
+      padding: 0.4rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #5a7a5e;
+      font-size: 0.95rem;
+    }
+
+    .learning-objectives li::before {
+      content: "~";
+      position: absolute;
+      left: 0;
+      color: var(--sage);
+    }
+
+    /* ===== CALLOUTS ===== */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 3px solid;
+    }
+
+    .callout-tip {
+      background: var(--sage-light);
+      border-color: var(--sage);
+    }
+
+    .callout-info {
+      background: var(--lilac-light);
+      border-color: var(--lilac);
+    }
+
+    .callout-warning {
+      background: var(--dusty-pink-light);
+      border-color: var(--dusty-pink);
+    }
+
+    .callout-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .callout p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* ===== FRAMEWORK BOX ===== */
+    .framework-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .framework-header {
+      padding: 1rem 1.5rem;
+      background: var(--bg);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .framework-content {
+      padding: 1.5rem;
+    }
+
+    .framework-step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .framework-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .step-content h5 {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+    }
+
+    .step-content p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* ===== QUIZ ===== */
+    .quiz-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-question {
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--sage);
+      background: var(--sage-light);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--sage);
+      background: var(--sage-light);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--sage);
+      background: var(--sage-light);
+    }
+
+    .quiz-option.incorrect {
+      border-color: var(--dusty-pink);
+      background: var(--dusty-pink-light);
+    }
+
+    .option-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--sage-light);
+      color: #5a7a5e;
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--dusty-pink-light);
+      color: #8a5a5a;
+    }
+
+    /* ===== REFLECTION BOX ===== */
+    .reflection-box {
+      background: var(--lilac-light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .reflection-box h4 {
+      color: #6b5f8a;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .reflection-box p {
+      font-size: 0.9rem;
+      color: #6b5f8a;
+    }
+
+    .reflection-box textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 1rem;
+      border: 1px solid var(--lilac);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      background: white;
+      color: var(--text);
+      margin-top: 0.5rem;
+    }
+
+    .reflection-box textarea:focus {
+      outline: none;
+      border-color: var(--lilac);
+      box-shadow: 0 0 0 3px rgba(184, 176, 208, 0.2);
+    }
+
+    /* ===== SCENARIO BOX ===== */
+    .scenario-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .scenario-header span {
+      font-size: 1.5rem;
+    }
+
+    .scenario-header h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .scenario-content {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ===== EMAIL TEMPLATE ===== */
+    .email-template {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .email-header {
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .email-body {
+      padding: 1.25rem;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .email-body p {
+      margin-bottom: 0.75rem;
+    }
+
+    /* ===== COMPLETION SCREEN ===== */
+    .completion-screen {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .completion-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .completion-screen h2 {
+      font-size: 1.75rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .completion-screen > p {
+      color: var(--text-light);
+      max-width: 400px;
+      margin: 0 auto 2rem;
+    }
+
+    .completion-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .completion-stat {
+      text-align: center;
+    }
+
+    .completion-stat .number {
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--sage);
+      line-height: 1;
+    }
+
+    .completion-stat .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ===== MODULE NAV ===== */
+    .module-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-family: inherit;
+    }
+
+    .nav-btn-primary {
+      background: var(--sage);
+      color: white;
+    }
+
+    .nav-btn-primary:hover {
+      background: #8aa38e;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn-secondary {
+      background: transparent;
+      color: var(--text-light);
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ===== LEARNING LAB BLOCK ===== */
+    .learning-lab-block {
+      background: linear-gradient(135deg, var(--lilac-light) 0%, var(--sage-light) 100%);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      border: 1px solid var(--border);
+    }
+
+    .lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .lab-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .lab-title h4 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .lab-badge {
+      background: var(--lilac);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .skip-btn {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: inherit;
+    }
+
+    .skip-btn:hover {
+      color: var(--text-light);
+    }
+
+    .lab-description {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .lab-content {
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      display: none;
+    }
+
+    .lab-content.active {
+      display: block;
+    }
+
+    .lab-toggle {
+      background: var(--sage);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .lab-toggle:hover {
+      background: #8aa38e;
+    }
+
+    /* ===== SIMULATOR STYLES ===== */
+    .simulator-container {
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .sim-section {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sim-section:last-child {
+      border-bottom: none;
+    }
+
+    .sim-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Tone Slider */
+    .tone-slider-container {
+      padding: 1rem 0;
+    }
+
+    .tone-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--sage), var(--lilac));
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .tone-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid var(--sage);
+      box-shadow: 0 2px 6px var(--shadow-md);
+      cursor: pointer;
+    }
+
+    .tone-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Toggle Switches */
+    .toggle-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .toggle-item span {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--border);
+      border-radius: 24px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .toggle-slider {
+      background: var(--sage);
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Chip Selection */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-light);
+    }
+
+    .chip:hover {
+      border-color: var(--sage);
+    }
+
+    .chip.selected {
+      background: var(--sage-light);
+      border-color: var(--sage);
+      color: #5a7a5e;
+    }
+
+    /* Prompt Preview */
+    .prompt-preview {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-light);
+      border: 1px solid var(--border);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .prompt-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .prompt-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      border: none;
+    }
+
+    .btn-copy {
+      background: var(--sage);
+      color: white;
+    }
+
+    .btn-copy:hover {
+      background: #8aa38e;
+    }
+
+    .btn-reset {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-light);
+    }
+
+    .btn-reset:hover {
+      background: var(--border);
+    }
+
+    /* Panic Meter */
+    .panic-meter {
+      margin: 1.5rem 0;
+    }
+
+    .panic-bar {
+      height: 12px;
+      background: var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .panic-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--sage), #e9c46a, var(--dusty-pink));
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    .panic-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Reset Timer */
+    .reset-timer {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .timer-display {
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--sage);
+      margin-bottom: 0.5rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-message {
+      color: var(--text-light);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .timer-btn {
+      background: var(--sage);
+      color: white;
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .timer-btn:hover {
+      background: #8aa38e;
+    }
+
+    .timer-btn.running {
+      background: var(--dusty-pink);
+    }
+
+    /* ===== UTILITIES ===== */
+    .hidden {
+      display: none !important;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .course-player {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .content-area {
+        padding: 1.5rem;
+      }
+
+      .home-header h1 {
+        font-size: 2rem;
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+      }
+
+      .completion-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .module-nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .module-nav .nav-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HOME PAGE -->
+  <div id="homePage" class="home-container">
+    <header class="home-header">
+      <h1>random microlearning courses i build for fun</h1>
+      <p>small lessons, big ideas. no pressure.</p>
+    </header>
+
+    <div class="course-grid">
+      <div class="course-card sage" onclick="openCourse('convo')">
+        <span class="emoji">💬</span>
+        <h3>Conversations, Reimagined</h3>
+        <p class="tagline">Learn to design AI chatbots that actually help people. Case study: ThreadLab Co.</p>
+        <div class="course-meta">
+          <span class="meta-tag">30 min</span>
+          <span class="meta-tag">Hands-on</span>
+          <span class="meta-tag">7 modules</span>
+        </div>
+        <p class="course-outcome">You'll leave with a working chatbot prototype</p>
+      </div>
+
+      <div class="course-card lilac" onclick="openCourse('typo')">
+        <span class="emoji">📧</span>
+        <h3>The Great Typo Panic</h3>
+        <p class="tagline">Why you reread that email 6 times. A gentle guide to calmer communication.</p>
+        <div class="course-meta">
+          <span class="meta-tag">15 min</span>
+          <span class="meta-tag">Reflective</span>
+          <span class="meta-tag">5 modules</span>
+        </div>
+        <p class="course-outcome">You'll hit send with more confidence</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSATIONS REIMAGINED COURSE -->
+  <div id="convoCourse" class="course-player hidden">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="back-btn" onclick="goHome()">← Back to courses</div>
+        <h2 class="sidebar-title">Conversations, Reimagined</h2>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="convoProgressBar"></div>
+          </div>
+          <div class="progress-text"><span id="convoProgressText">0%</span> complete</div>
+        </div>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-module="convo-1" onclick="loadModule('convo', 1)">
+          <span class="nav-status">1</span>
+          <span>Welcome</span>
+        </li>
+        <li class="nav-item" data-module="convo-2" onclick="loadModule('convo', 2)">
+          <span class="nav-status">2</span>
+          <span>Understanding the Problem</span>
+        </li>
+        <li class="nav-item" data-module="convo-3" onclick="loadModule('convo', 3)">
+          <span class="nav-status">3</span>
+          <span>The Problem Statement</span>
+        </li>
+        <li class="nav-item" data-module="convo-4" onclick="loadModule('convo', 4)">
+          <span class="nav-status">4</span>
+          <span>Designing Behaviors</span>
+        </li>
+        <li class="nav-item" data-module="convo-5" onclick="loadModule('convo', 5)">
+          <span class="nav-status">5</span>
+          <span>Prep Work: FAQs & Tone</span>
+        </li>
+        <li class="nav-item" data-module="convo-6" onclick="loadModule('convo', 6)">
+          <span class="nav-status">6</span>
+          <span>Building Your Chatbot</span>
+        </li>
+        <li class="nav-item" data-module="convo-7" onclick="loadModule('convo', 7)">
+          <span class="nav-status">7</span>
+          <span>Recap & Reflect</span>
+        </li>
+      </ul>
+    </aside>
+    <main class="content-area" id="convoContent"></main>
+  </div>
+
+  <!-- TYPO PANIC COURSE -->
+  <div id="typoCourse" class="course-player hidden">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="back-btn" onclick="goHome()">← Back to courses</div>
+        <h2 class="sidebar-title">The Great Typo Panic</h2>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="typoProgressBar"></div>
+          </div>
+          <div class="progress-text"><span id="typoProgressText">0%</span> complete</div>
+        </div>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-module="typo-1" onclick="loadModule('typo', 1)">
+          <span class="nav-status">1</span>
+          <span>Welcome</span>
+        </li>
+        <li class="nav-item" data-module="typo-2" onclick="loadModule('typo', 2)">
+          <span class="nav-status">2</span>
+          <span>Email Perfectionism</span>
+        </li>
+        <li class="nav-item" data-module="typo-3" onclick="loadModule('typo', 3)">
+          <span class="nav-status">3</span>
+          <span>Taming the Email Monster</span>
+        </li>
+        <li class="nav-item" data-module="typo-4" onclick="loadModule('typo', 4)">
+          <span class="nav-status">4</span>
+          <span>AI to the Rescue</span>
+        </li>
+        <li class="nav-item" data-module="typo-5" onclick="loadModule('typo', 5)">
+          <span class="nav-status">5</span>
+          <span>Final Practice</span>
+        </li>
+      </ul>
+    </aside>
+    <main class="content-area" id="typoContent"></main>
+  </div>
+
+  <script>
+    // ===== COURSE DATA =====
+    const courseData = {
+      convo: {
+        totalModules: 7,
+        completed: [],
+        modules: {
+          1: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 1 of 7</div>
+              <h1 class="module-title">Welcome to Conversations, Reimagined</h1>
+              <p class="module-subtitle">Building AI Chatbots That Actually Help People</p>
+            </div>
+
+            <div class="content-block">
+              <p>Welcome! In this course, you'll learn how to design and build AI-powered chatbots that solve real business problems while keeping humans at the center of the experience.</p>
+              <p>We'll work through a real case study: <strong>ThreadLab Co.</strong>, a sustainable fashion brand that needs help managing customer conversations at scale.</p>
+            </div>
+
+            <div class="scenario-box">
+              <div class="scenario-header">
+                <span>🏢</span>
+                <h4>Meet ThreadLab Co.</h4>
+              </div>
+              <div class="scenario-content">
+                ThreadLab is a growing sustainable fashion brand. They've built a loyal customer base who loves their eco-friendly approach, but their small support team is drowning in repetitive questions about sizing, shipping, and returns. Sound familiar?
+              </div>
+            </div>
+
+            <div class="learning-objectives">
+              <h4>What You'll Learn</h4>
+              <ul>
+                <li>Identify problems that AI chatbots can (and can't) solve</li>
+                <li>Define chatbot personality, boundaries, and escalation paths</li>
+                <li>Build a working prototype using Chatbase</li>
+                <li>Test and iterate on your chatbot's responses</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-info">
+              <div class="callout-title">Course Details</div>
+              <p><strong>Duration:</strong> About 30 minutes<br>
+              <strong>Level:</strong> Beginner-friendly<br>
+              <strong>You'll need:</strong> A free Chatbase account (we'll set this up together)</p>
+            </div>
+
+            <div class="module-nav">
+              <div></div>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Let's Begin →</button>
+            </div>
+          `,
+          2: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 2 of 7</div>
+              <h1 class="module-title">Understanding the Problem</h1>
+              <p class="module-subtitle">Before we build anything, we need to understand what we're solving.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>ThreadLab's Challenge</h3>
+              <p>ThreadLab's support team receives hundreds of messages daily. Let's look at what they're dealing with:</p>
+            </div>
+
+            <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">📊</span>
+                <div>
+                  <strong>Volume</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">400+ messages per day, but only 3 support staff</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">🔁</span>
+                <div>
+                  <strong>Repetition</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">60% of questions are variations of the same 10 topics</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">⏰</span>
+                <div>
+                  <strong>Timing</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">Customers expect quick responses, but team works 9-5</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">💚</span>
+                <div>
+                  <strong>Brand Voice</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">ThreadLab's friendly, sustainable brand must shine through</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>What AI Can and Can't Do</h3>
+              <p>Before we jump to building, let's be honest about AI chatbots:</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--sage-light); padding: 1.25rem; border-radius: var(--radius-sm);">
+                <strong style="color: #5a7a5e;">AI is great for...</strong>
+                <ul style="margin: 0.75rem 0 0; color: #5a7a5e; font-size: 0.9rem; padding-left: 1.25rem;">
+                  <li>Answering FAQs instantly</li>
+                  <li>Providing 24/7 availability</li>
+                  <li>Handling multiple conversations</li>
+                  <li>Consistent brand voice</li>
+                </ul>
+              </div>
+              <div style="background: var(--dusty-pink-light); padding: 1.25rem; border-radius: var(--radius-sm);">
+                <strong style="color: #8a5a5a;">AI struggles with...</strong>
+                <ul style="margin: 0.75rem 0 0; color: #8a5a5a; font-size: 0.9rem; padding-left: 1.25rem;">
+                  <li>Complex emotional situations</li>
+                  <li>Unusual or edge cases</li>
+                  <li>Decisions requiring judgment</li>
+                  <li>Complaints needing empathy</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-title">Key Insight</div>
+              <p>The best AI chatbots know when to hand off to humans. We'll design for this from the start.</p>
+            </div>
+
+            <div class="quiz-container">
+              <div class="quiz-question">Which scenario is BEST suited for an AI chatbot?</div>
+              <div class="quiz-options">
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q1')" data-correct="true">
+                  <div class="option-marker">A</div>
+                  <span>A customer asking "What's your return policy?"</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q1')">
+                  <div class="option-marker">B</div>
+                  <span>A customer saying "I'm really upset about my damaged order"</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q1')">
+                  <div class="option-marker">C</div>
+                  <span>A customer with a unique custom order request</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q1')">
+                  <div class="option-marker">D</div>
+                  <span>A customer asking to speak with the CEO</span>
+                </div>
+              </div>
+              <div class="quiz-feedback" id="convo-q1-feedback"></div>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('convo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Next: Problem Statement →</button>
+            </div>
+          `,
+          3: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 3 of 7</div>
+              <h1 class="module-title">The Problem Statement</h1>
+              <p class="module-subtitle">Defining exactly what we're building and why.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>Why Problem Statements Matter</h3>
+              <p>A clear problem statement keeps us focused. Without one, we might build a chatbot that's technically impressive but doesn't actually solve ThreadLab's real needs.</p>
+            </div>
+
+            <div class="framework-box">
+              <div class="framework-header">The Problem Statement Framework</div>
+              <div class="framework-content">
+                <div class="framework-step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h5>WHO is affected?</h5>
+                    <p>ThreadLab customers and the support team</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h5>WHAT is the problem?</h5>
+                    <p>Long wait times for simple questions; team burnout from repetition</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h5>WHEN does it occur?</h5>
+                    <p>Peak shopping times; outside business hours</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">4</div>
+                  <div class="step-content">
+                    <h5>WHY does it matter?</h5>
+                    <p>Lost sales, frustrated customers, exhausted team</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout callout-info">
+              <div class="callout-title">ThreadLab's Problem Statement</div>
+              <p><em>"ThreadLab customers need quick, accurate answers to common questions about sizing, shipping, and returns — especially outside business hours — so they can shop with confidence and our support team can focus on complex issues that need a human touch."</em></p>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Your Turn: Practice Writing a Problem Statement</h4>
+              <p style="color: var(--text-light); margin-bottom: 1rem;">Think of a business you know (maybe your own workplace). What's a problem an AI chatbot might help solve?</p>
+              <textarea placeholder="WHO is affected?
+
+WHAT is the problem?
+
+WHEN does it occur?
+
+WHY does it matter?
+
+Write your problem statement here..."></textarea>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('convo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Next: Designing Behaviors →</button>
+            </div>
+          `,
+          4: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 4 of 7</div>
+              <h1 class="module-title">Designing Chatbot Behaviors</h1>
+              <p class="module-subtitle">What should your chatbot do — and what should it never do?</p>
+            </div>
+
+            <div class="content-block">
+              <h3>The Behavior Framework</h3>
+              <p>Before writing a single line of chatbot logic, we need to define its boundaries. This prevents awkward situations and protects your brand.</p>
+            </div>
+
+            <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--sage-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <h4 style="color: #5a7a5e; margin-bottom: 0.75rem;">DO: Things the bot should handle</h4>
+                <ul style="color: #5a7a5e; font-size: 0.95rem; padding-left: 1.25rem; margin: 0;">
+                  <li>Answer FAQs about sizing, shipping, returns</li>
+                  <li>Provide order status updates</li>
+                  <li>Share product availability information</li>
+                  <li>Give basic styling suggestions</li>
+                  <li>Direct customers to relevant pages</li>
+                </ul>
+              </div>
+              <div style="background: var(--dusty-pink-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <h4 style="color: #8a5a5a; margin-bottom: 0.75rem;">DON'T: Things that need a human</h4>
+                <ul style="color: #8a5a5a; font-size: 0.95rem; padding-left: 1.25rem; margin: 0;">
+                  <li>Handle complaints or frustrated customers</li>
+                  <li>Process refunds or exchanges</li>
+                  <li>Give medical advice about materials/allergies</li>
+                  <li>Make promises about delivery dates</li>
+                  <li>Discuss pricing negotiations</li>
+                </ul>
+              </div>
+              <div style="background: var(--lilac-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <h4 style="color: #6b5f8a; margin-bottom: 0.75rem;">ESCALATE: When to hand off</h4>
+                <ul style="color: #6b5f8a; font-size: 0.95rem; padding-left: 1.25rem; margin: 0;">
+                  <li>Customer expresses frustration or uses negative language</li>
+                  <li>Question is asked 2+ times (bot may not understand)</li>
+                  <li>Request involves money or account changes</li>
+                  <li>Customer explicitly asks for a human</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- LEARNING LAB: Chatbot Training Simulator -->
+            <div class="learning-lab-block">
+              <div class="lab-header">
+                <div class="lab-title">
+                  <h4>Learning Lab: Chatbot Trainer</h4>
+                  <span class="lab-badge">Interactive</span>
+                </div>
+                <button class="skip-btn" onclick="this.closest('.learning-lab-block').querySelector('.lab-content').classList.remove('active'); this.closest('.learning-lab-block').querySelector('.lab-toggle').style.display='inline-block';">Skip for now</button>
+              </div>
+              <p class="lab-description">Practice designing chatbot behavior by configuring tone, boundaries, and response style. Your choices generate a real system prompt.</p>
+              <button class="lab-toggle" onclick="this.style.display='none'; this.closest('.learning-lab-block').querySelector('.lab-content').classList.add('active');">Open Simulator</button>
+
+              <div class="lab-content" id="chatbotSimulator">
+                <div class="simulator-container">
+                  <div class="sim-section">
+                    <div class="sim-label">Tone Style</div>
+                    <div class="tone-slider-container">
+                      <input type="range" min="0" max="100" value="50" class="tone-slider" id="toneSlider" oninput="updatePromptPreview()">
+                      <div class="tone-labels">
+                        <span>Direct & Professional</span>
+                        <span>Warm & Friendly</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sim-section">
+                    <div class="sim-label">Behavior Boundaries</div>
+                    <div class="toggle-grid">
+                      <div class="toggle-item">
+                        <span>Admit when unsure</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="updatePromptPreview()">
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
+                      <div class="toggle-item">
+                        <span>Offer human handoff</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="updatePromptPreview()">
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
+                      <div class="toggle-item">
+                        <span>Use emojis sparingly</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="updatePromptPreview()">
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
+                      <div class="toggle-item">
+                        <span>Stay on-topic only</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" onchange="updatePromptPreview()">
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sim-section">
+                    <div class="sim-label">Response Style (pick up to 2)</div>
+                    <div class="chip-group" id="responseChips">
+                      <span class="chip selected" onclick="toggleChip(this)">Concise</span>
+                      <span class="chip" onclick="toggleChip(this)">Detailed</span>
+                      <span class="chip selected" onclick="toggleChip(this)">Helpful</span>
+                      <span class="chip" onclick="toggleChip(this)">Playful</span>
+                    </div>
+                  </div>
+
+                  <div class="sim-section">
+                    <div class="sim-label">Generated System Prompt</div>
+                    <div class="prompt-preview" id="promptPreview">
+                      You are ThreadLab's friendly shopping assistant...
+                    </div>
+                    <div class="prompt-actions">
+                      <button class="btn-copy" onclick="copyPrompt()">Copy Prompt</button>
+                      <button class="btn-reset" onclick="resetSimulator()">Reset</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="quiz-container">
+              <div class="quiz-question">Which of these is NOT a good chatbot behavior for a fashion retail brand like ThreadLab?</div>
+              <div class="quiz-options">
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q2')">
+                  <div class="option-marker">A</div>
+                  <span>Using friendly, conversational language with occasional emojis</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q2')">
+                  <div class="option-marker">B</div>
+                  <span>Admitting when it doesn't know something and offering to connect to a human</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q2')" data-correct="true">
+                  <div class="option-marker">C</div>
+                  <span>Giving medical advice about fabric allergies</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'convo-q2')">
+                  <div class="option-marker">D</div>
+                  <span>Proactively suggesting alternatives when items are out of stock</span>
+                </div>
+              </div>
+              <div class="quiz-feedback" id="convo-q2-feedback"></div>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('convo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Next: Prep Work →</button>
+            </div>
+          `,
+          5: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 5 of 7</div>
+              <h1 class="module-title">Prep Work: FAQs & Tone</h1>
+              <p class="module-subtitle">Gathering the raw materials your chatbot needs to shine.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>Building Your Knowledge Base</h3>
+              <p>Before we can build a chatbot, we need to give it something to say. This is where we gather the FAQs, define the tone, and create the "brain" of our AI assistant.</p>
+            </div>
+
+            <div class="framework-box">
+              <div class="framework-header">The FAQ Collection Process</div>
+              <div class="framework-content">
+                <div class="framework-step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h5>Audit existing questions</h5>
+                    <p>Pull data from support tickets, emails, live chat logs</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h5>Categorize by theme</h5>
+                    <p>Group into: Shipping, Sizing, Returns, Products, Account</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h5>Prioritize by volume</h5>
+                    <p>Start with the top 10-15 most frequent questions</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">4</div>
+                  <div class="step-content">
+                    <h5>Write ideal responses</h5>
+                    <p>Craft answers that match your brand voice</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>ThreadLab's Top 5 FAQs</h3>
+              <p>Based on our analysis, here are ThreadLab's most common customer questions:</p>
+            </div>
+
+            <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--sage);">
+                <strong style="color: var(--sage);">1. Sizing Questions (28%)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">"Does this run true to size?" / "I'm between sizes, what do you recommend?"</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--lilac);">
+                <strong style="color: var(--lilac);">2. Shipping Status (22%)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">"Where's my order?" / "How long does shipping take?"</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid #a8c5a8;">
+                <strong style="color: #7a9a7a;">3. Product Availability (18%)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">"Do you have this in [color]?" / "When will this be restocked?"</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid #c9b896;">
+                <strong style="color: #9a8a66;">4. Returns & Exchanges (15%)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">"What's your return policy?" / "How do I exchange this?"</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border-left: 4px solid var(--dusty-pink);">
+                <strong style="color: var(--dusty-pink);">5. Styling Advice (12%)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">"What would you wear this with?" / "Is this good for a wedding?"</p>
+              </div>
+            </div>
+
+            <div class="callout callout-warning">
+              <div class="callout-title">Know Your Boundaries</div>
+              <p>Note that styling advice is in the top 5, but it's also the most subjective. Your chatbot should handle basic styling questions but escalate complex requests ("I need an outfit for my boss's funeral") to humans.</p>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Define ThreadLab's Brand Voice</h4>
+              <p style="color: var(--text-light); margin-bottom: 1rem;">How should ThreadLab's chatbot sound? Complete these prompts:</p>
+              <textarea placeholder="ThreadLab's chatbot should sound...
+
+Words/phrases to USE: (e.g., 'absolutely!', 'great choice!')
+
+Words/phrases to AVOID: (e.g., 'unfortunately', 'policy states')
+
+Emoji usage: (e.g., 'sparingly, mainly 💚🌊✨')
+
+When unsure, it should say..."></textarea>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('convo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Next: Building Your Chatbot →</button>
+            </div>
+          `,
+          6: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 6 of 7</div>
+              <h1 class="module-title">Building Your Chatbot</h1>
+              <p class="module-subtitle">Time to bring ThreadLab's AI assistant to life!</p>
+            </div>
+
+            <div class="content-block">
+              <h3>Let's Build!</h3>
+              <p>You've done the hard work: defined the problem, mapped the behaviors, gathered FAQs, and established brand voice. Now it's time to actually build the chatbot.</p>
+              <p>We'll use <strong>Chatbase</strong>, a no-code tool that makes creating AI chatbots surprisingly simple.</p>
+            </div>
+
+            <div class="framework-box">
+              <div class="framework-header">Building Steps</div>
+              <div class="framework-content">
+                <div class="framework-step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h5>Create your Chatbase account</h5>
+                    <p>Sign up at chatbase.co with your Gmail account</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h5>Upload your knowledge base</h5>
+                    <p>Add your FAQ document and brand guidelines</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h5>Configure the personality</h5>
+                    <p>Set the system prompt with your brand voice</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number">4</div>
+                  <div class="step-content">
+                    <h5>Test & iterate</h5>
+                    <p>Try various questions and refine responses</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout callout-info">
+              <div class="callout-title">Sample System Prompt for ThreadLab</div>
+              <p style="font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem; background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); margin-top: 0.5rem; line-height: 1.6;">
+                You are ThreadLab's friendly shopping assistant. Your personality is warm, helpful, and fashion-forward — like a stylish friend who works at the store. Use casual language and the occasional emoji (💚🌊✨). Always be honest about what you know and don't know. If someone asks about complex styling, medical concerns, or complaints, offer to connect them with a human stylist. Never make up product information — if unsure, say "Let me check on that for you!"
+              </p>
+            </div>
+
+            <div class="content-block">
+              <h3>Testing Your Chatbot</h3>
+              <p>Once built, test your chatbot with these scenarios:</p>
+              <ul>
+                <li>Basic FAQ: "What's your return policy?"</li>
+                <li>Sizing help: "I'm 5'6 and 140lbs, what size should I get?"</li>
+                <li>Product check: "Do you have the Luna top in black?"</li>
+                <li>Edge case: "I need to return something I wore once with the tags removed"</li>
+                <li>Out of scope: "Can you recommend a good restaurant nearby?"</li>
+              </ul>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Document Your Test Results</h4>
+              <p style="color: var(--text-light); margin-bottom: 1rem;">Test your chatbot with at least 5 questions and note what worked and what needs improvement:</p>
+              <textarea placeholder="Question 1:
+Bot response:
+What worked / What to improve:
+
+Question 2:
+..."></textarea>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('convo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('convo')">Next: Recap & Reflect →</button>
+            </div>
+          `,
+          7: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 7 of 7</div>
+              <h1 class="module-title">Recap & Reflect</h1>
+              <p class="module-subtitle">Celebrating what you've accomplished and planning next steps.</p>
+            </div>
+
+            <div class="completion-screen">
+              <div class="completion-icon">🎉</div>
+              <h2>Congratulations!</h2>
+              <p>You've successfully completed Conversations, Reimagined and built your first AI chatbot prototype!</p>
+
+              <div class="completion-stats">
+                <div class="completion-stat">
+                  <div class="number">7</div>
+                  <div class="label">Modules Completed</div>
+                </div>
+                <div class="completion-stat">
+                  <div class="number">1</div>
+                  <div class="label">Chatbot Built</div>
+                </div>
+                <div class="completion-stat">
+                  <div class="number">∞</div>
+                  <div class="label">Possibilities Ahead</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>What You've Learned</h3>
+              <ul>
+                <li>How to identify and define problems that AI can solve</li>
+                <li>The importance of human-centered design in AI</li>
+                <li>How to craft problem statements that guide development</li>
+                <li>Building a knowledge base from FAQs and brand guidelines</li>
+                <li>Defining chatbot personality and boundaries</li>
+                <li>Using Chatbase to build a functional prototype</li>
+                <li>Testing and iterating on AI responses</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-title">What's Next?</div>
+              <p>Your chatbot is just the beginning. Consider: How might you expand its knowledge? Could it integrate with your inventory system? What other customer touchpoints could benefit from AI assistance?</p>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Final Reflection</h4>
+              <p style="color: var(--text-light); margin-bottom: 1rem;">Take a moment to reflect on your learning journey:</p>
+              <textarea placeholder="1. What was the most valuable insight from this course?
+
+2. How might you apply what you learned in your own work?
+
+3. What questions do you still have about AI chatbot design?
+
+4. What would you do differently if you built another chatbot?"></textarea>
+            </div>
+
+            <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: var(--radius); margin-top: 2rem; border: 1px solid var(--border);">
+              <h3 style="margin-bottom: 0.5rem;">Thank You for Learning With Us!</h3>
+              <p style="color: var(--text-light); margin-bottom: 1.5rem;">Remember: The best AI solutions start with understanding humans first.</p>
+              <button class="nav-btn nav-btn-primary" onclick="goHome()">← Back to Course Library</button>
+            </div>
+          `
+        }
+      },
+      typo: {
+        totalModules: 5,
+        completed: [],
+        modules: {
+          1: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 1 of 5</div>
+              <h1 class="module-title">Welcome to The Great Typo Panic</h1>
+              <p class="module-subtitle">Why You Reread That Email 6 Times</p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, var(--lilac) 0%, var(--dusty-pink) 100%); border-radius: var(--radius); padding: 2.5rem; color: white; text-align: center; margin-bottom: 2rem;">
+              <div style="font-size: 4rem; margin-bottom: 1rem;">😱</div>
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 500;">Welcome to The Great Typo Panic</h2>
+              <p style="opacity: 0.9;">A crash course in email mistakes, overthinking, and recovering with grace.</p>
+            </div>
+
+            <div class="content-block">
+              <p style="font-style: italic; color: var(--text-light); font-size: 1.05rem; text-align: center; margin-bottom: 2rem;">
+                "...and how to overthink the difference between 'Best Wishes' and 'Best'."
+              </p>
+              <p>If you triple-check every email and still worry after hitting send, you're in the right place. This quick course will help you break the overthinking loop and write clear, kind, confident emails — without the stress.</p>
+            </div>
+
+            <div style="background: var(--dusty-pink-light); padding: 1.5rem; border-radius: var(--radius-sm); text-align: center; margin: 2rem 0;">
+              <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text);">
+                "<span style="text-decoration: line-through; color: var(--dusty-pink);">Their</span> going to the meeting."
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0;">You hit send. You exhale. Then you spot it.</p>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Welcome to the club.</p>
+            </div>
+
+            <div class="learning-objectives" style="background: var(--lilac-light);">
+              <h4 style="color: #6b5f8a;">What You'll Learn</h4>
+              <ul>
+                <li style="color: #6b5f8a;">Recognize common email anxiety triggers</li>
+                <li style="color: #6b5f8a;">Learn simple frameworks for writing clean, typo-light emails</li>
+                <li style="color: #6b5f8a;">Use AI to proofread, rewrite, or tone-check email messages</li>
+                <li style="color: #6b5f8a;">Practice responding to a typo in a way that maintains confidence</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-info">
+              <div class="callout-title">Course Details</div>
+              <p><strong>Duration:</strong> About 15 minutes<br>
+              <strong>Level:</strong> Beginner / All-levels<br>
+              <strong>Who it's for:</strong> Overthinkers who triple-check emails and fear typos after sending.</p>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Quick Check-In</h4>
+              <p style="color: #6b5f8a; margin-bottom: 1rem;">Before we dive in, how would you rate your current email anxiety level?</p>
+              <div style="display: flex; justify-content: space-between; gap: 0.5rem;">
+                <span style="text-align: center; flex: 1; padding: 1rem; background: white; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border);">😌<br><small>Chill</small></span>
+                <span style="text-align: center; flex: 1; padding: 1rem; background: white; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border);">😐<br><small>Mild</small></span>
+                <span style="text-align: center; flex: 1; padding: 1rem; background: white; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border);">😰<br><small>Moderate</small></span>
+                <span style="text-align: center; flex: 1; padding: 1rem; background: white; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--border);">🫠<br><small>Please help</small></span>
+              </div>
+            </div>
+
+            <div class="module-nav">
+              <div></div>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('typo')">Next: Email Perfectionism →</button>
+            </div>
+          `,
+          2: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 2 of 5</div>
+              <h1 class="module-title">Email Perfectionism</h1>
+              <p class="module-subtitle">Understanding why we obsess over every word.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>The Overthinking Loop</h3>
+              <p>You've written the email. You've read it three times. You've changed "Hi" to "Hello" to "Hey" back to "Hi." You've agonized over whether to use an exclamation point. Sound familiar?</p>
+            </div>
+
+            <div class="scenario-box" style="background: var(--dusty-pink-light); border: 1px solid var(--dusty-pink);">
+              <div class="scenario-header">
+                <span>🔄</span>
+                <h4 style="color: #8a5a5a;">The Classic Spiral</h4>
+              </div>
+              <div class="scenario-content" style="color: #8a5a5a;">
+                Write email → Read email → Change one word → Read again → Wonder if it sounds passive-aggressive → Add a smiley face → Delete the smiley face → Add it back → Send → Immediately spot a typo → Contemplate faking your own death
+              </div>
+            </div>
+
+            <!-- LEARNING LAB: Panic Meter -->
+            <div class="learning-lab-block">
+              <div class="lab-header">
+                <div class="lab-title">
+                  <h4>Learning Lab: Panic Meter</h4>
+                  <span class="lab-badge">Interactive</span>
+                </div>
+                <button class="skip-btn" onclick="this.closest('.learning-lab-block').querySelector('.lab-content').classList.remove('active'); this.closest('.learning-lab-block').querySelector('.lab-toggle').style.display='inline-block';">Skip for now</button>
+              </div>
+              <p class="lab-description">See how different email scenarios affect your panic level. Notice patterns in what triggers anxiety.</p>
+              <button class="lab-toggle" onclick="this.style.display='none'; this.closest('.learning-lab-block').querySelector('.lab-content').classList.add('active');">Try It</button>
+
+              <div class="lab-content">
+                <div class="sim-label">How would you feel sending this?</div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); margin: 1rem 0; font-style: italic; color: var(--text-light);">
+                  "Hi Sarah, I wanted to follow up on the project. Let me know if you have any questions!"
+                </div>
+                <div class="panic-meter">
+                  <div class="panic-bar">
+                    <div class="panic-fill" id="panicFill" style="width: 20%;"></div>
+                  </div>
+                  <div class="panic-labels">
+                    <span>Calm</span>
+                    <span>Mild worry</span>
+                    <span>Full panic</span>
+                  </div>
+                </div>
+                <div class="chip-group" style="margin-top: 1rem;">
+                  <span class="chip" onclick="setPanic(20, this)">Feels fine</span>
+                  <span class="chip" onclick="setPanic(45, this)">A bit worried</span>
+                  <span class="chip" onclick="setPanic(70, this)">Nervous</span>
+                  <span class="chip" onclick="setPanic(95, this)">Spiraling</span>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); text-align: center;" id="panicFeedback">Select how you'd feel to continue.</p>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>Why Do We Do This?</h3>
+              <p>Email anxiety is real, and it stems from several psychological factors:</p>
+            </div>
+
+            <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">🔍</span>
+                <div>
+                  <strong>Permanence</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">Unlike spoken words, emails stick around. That typo will live in someone's inbox forever.</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">👥</span>
+                <div>
+                  <strong>Audience Anxiety</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">We write to our boss the same email we'd dash off to a friend, but overthink every word.</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">🎭</span>
+                <div>
+                  <strong>Tone Ambiguity</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">Without facial expressions or voice tone, we worry our message will be misread.</p>
+                </div>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start;">
+                <span style="font-size: 1.5rem;">⚡</span>
+                <div>
+                  <strong>Spotlight Effect</strong>
+                  <p style="margin: 0.25rem 0 0; color: var(--text-light); font-size: 0.95rem;">We think people notice our mistakes way more than they actually do.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="quiz-container">
+              <div class="quiz-question">Which of these is TRUE about how recipients perceive email typos?</div>
+              <div class="quiz-options">
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q1')">
+                  <div class="option-marker">A</div>
+                  <span>One typo will permanently damage your professional reputation</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q1')" data-correct="true">
+                  <div class="option-marker">B</div>
+                  <span>Most people barely notice or quickly forget minor typos</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q1')">
+                  <div class="option-marker">C</div>
+                  <span>You should always send a follow-up email apologizing for any typo</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q1')">
+                  <div class="option-marker">D</div>
+                  <span>Professional emails should never contain any personality</span>
+                </div>
+              </div>
+              <div class="quiz-feedback" id="typo-q1-feedback"></div>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-title">Reality Check</div>
+              <p>Research shows we overestimate how much others notice our mistakes by about <strong>50%</strong>. That "catastrophic" typo? The recipient probably skimmed right past it.</p>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('typo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('typo')">Next: Taming the Email Monster →</button>
+            </div>
+          `,
+          3: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 3 of 5</div>
+              <h1 class="module-title">Taming the Email Monster</h1>
+              <p class="module-subtitle">Practical frameworks for cleaner, calmer emails.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>The CLEAR Email Framework</h3>
+              <p>Instead of endlessly re-reading, use a simple framework to write emails that are clear the first time:</p>
+            </div>
+
+            <div class="framework-box">
+              <div class="framework-header">The CLEAR Framework</div>
+              <div class="framework-content">
+                <div class="framework-step">
+                  <div class="step-number" style="background: var(--lilac);">C</div>
+                  <div class="step-content">
+                    <h5>Context</h5>
+                    <p>One sentence of background so they know why you're writing</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number" style="background: var(--lilac);">L</div>
+                  <div class="step-content">
+                    <h5>Lead with the Ask</h5>
+                    <p>State what you need in the first paragraph, not the last</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number" style="background: var(--lilac);">E</div>
+                  <div class="step-content">
+                    <h5>Explain (Briefly)</h5>
+                    <p>Add necessary details, but keep it scannable</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number" style="background: var(--lilac);">A</div>
+                  <div class="step-content">
+                    <h5>Action & Timeline</h5>
+                    <p>Be specific: "Could you review by Thursday?"</p>
+                  </div>
+                </div>
+                <div class="framework-step">
+                  <div class="step-number" style="background: var(--lilac);">R</div>
+                  <div class="step-content">
+                    <h5>Re-read Once</h5>
+                    <p>One quick scan. Then hit send. Trust yourself.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>Before & After</h3>
+              <p>Let's see the CLEAR framework in action:</p>
+            </div>
+
+            <div class="email-template" style="border-color: var(--dusty-pink); border-width: 2px;">
+              <div class="email-header" style="background: var(--dusty-pink-light);">
+                <div><strong>Before:</strong> The Rambling Email</div>
+              </div>
+              <div class="email-body">
+                <p>Hi Sarah,</p>
+                <p>Hope you're doing well! I wanted to reach out because I've been thinking about the project and I know we talked about it last week but I wasn't sure if you had a chance to look at the document I sent over. It's the one with the quarterly numbers. I think. Anyway, if you get a chance to look at it that would be great. Also, I had a question about the meeting next week but we can talk about that later. Let me know if you need anything from me!</p>
+                <p>Thanks!<br>Alex</p>
+              </div>
+            </div>
+
+            <div class="email-template" style="border-color: var(--sage); border-width: 2px; margin-top: 1rem;">
+              <div class="email-header" style="background: var(--sage-light);">
+                <div><strong>After:</strong> The CLEAR Email</div>
+              </div>
+              <div class="email-body">
+                <p>Hi Sarah,</p>
+                <p><strong>Quick ask:</strong> Could you review the Q3 numbers doc I sent Friday and share feedback by Thursday?</p>
+                <p>Context: We need final approval before the leadership meeting next Monday. The doc is in the shared drive (link below).</p>
+                <p>Let me know if you have questions!</p>
+                <p>Thanks,<br>Alex</p>
+              </div>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-title">The Magic of "Quick ask:"</div>
+              <p>Starting with "Quick ask:" or "TL;DR:" signals to readers that you value their time and gets straight to the point. It's not rude — it's respectful.</p>
+            </div>
+
+            <!-- LEARNING LAB: Emotional Reset Timer -->
+            <div class="learning-lab-block">
+              <div class="lab-header">
+                <div class="lab-title">
+                  <h4>Learning Lab: Calm Reset</h4>
+                  <span class="lab-badge">Breathing</span>
+                </div>
+                <button class="skip-btn" onclick="this.closest('.learning-lab-block').querySelector('.lab-content').classList.remove('active'); this.closest('.learning-lab-block').querySelector('.lab-toggle').style.display='inline-block';">Skip for now</button>
+              </div>
+              <p class="lab-description">Before hitting send on an important email, take a moment to reset. This 30-second pause can prevent anxiety spirals.</p>
+              <button class="lab-toggle" onclick="this.style.display='none'; this.closest('.learning-lab-block').querySelector('.lab-content').classList.add('active');">Take a Breath</button>
+
+              <div class="lab-content">
+                <div class="reset-timer">
+                  <div class="timer-display" id="timerDisplay">0:30</div>
+                  <div class="timer-message" id="timerMessage">Press start to begin your reset</div>
+                  <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">Start</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>The "Good Enough" Rule</h3>
+              <p>Here's a liberating truth: <strong>A sent email is better than a perfect draft.</strong></p>
+              <p>Set a timer for 3 minutes. Write. Re-read once. Send. The recipient will not analyze your comma placement. They will read, respond, and move on with their day.</p>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Practice: Rewrite This Email</h4>
+              <p style="color: #6b5f8a; margin-bottom: 1rem;">Using the CLEAR framework, rewrite this rambling email:</p>
+              <div style="background: white; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; font-size: 0.9rem; font-style: italic; color: var(--text-light); border: 1px solid var(--border);">
+                "Hey! So I was wondering if maybe we could possibly reschedule our meeting? I know it was supposed to be tomorrow but something came up and I think it might be better to move it. Unless you really need to do it tomorrow, then I can make it work I guess. Let me know what you think!"
+              </div>
+              <textarea placeholder="Your CLEAR version here..."></textarea>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('typo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('typo')">Next: AI to the Rescue →</button>
+            </div>
+          `,
+          4: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 4 of 5</div>
+              <h1 class="module-title">AI to the Rescue</h1>
+              <p class="module-subtitle">Using AI tools to proofread, rewrite, and tone-check your emails.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>Your New Proofreading Partner</h3>
+              <p>AI isn't here to write your emails for you — it's here to be your safety net. Think of it as a patient colleague who will check your work without judgment.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--sage-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔍</div>
+                <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Proofread</h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">"Check this email for typos and grammar issues"</p>
+              </div>
+              <div style="background: var(--lilac-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">🎭</div>
+                <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Tone Check</h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">"Does this sound professional but friendly?"</p>
+              </div>
+              <div style="background: var(--sage-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">✂️</div>
+                <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Shorten</h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">"Make this more concise without losing meaning"</p>
+              </div>
+              <div style="background: var(--lilac-light); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔄</div>
+                <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Reframe</h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">"Make this less passive-aggressive"</p>
+              </div>
+            </div>
+
+            <div class="framework-box">
+              <div class="framework-header">AI Prompts You Can Use</div>
+              <div class="framework-content">
+                <div style="background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem;">
+                  "Proofread this email for any spelling or grammar errors. List what you find."
+                </div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem;">
+                  "On a scale of 1-5, how professional does this email sound? How could I improve it?"
+                </div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem;">
+                  "I'm worried this sounds passive-aggressive. Can you suggest a warmer way to say this?"
+                </div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem;">
+                  "Shorten this email to 3 sentences while keeping the main request clear."
+                </div>
+              </div>
+            </div>
+
+            <div class="callout callout-warning">
+              <div class="callout-title">AI Boundaries</div>
+              <p>AI is great for checking grammar and tone, but don't let it strip away your personality. If AI suggests changing your friendly "Hey!" to "Dear Sir/Madam," you can ignore it. You know your relationship with the recipient better than AI does.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>The 30-Second AI Check</h3>
+              <p>Before hitting send on important emails:</p>
+              <ol>
+                <li>Copy your email into ChatGPT, Claude, or your AI tool of choice</li>
+                <li>Ask: <em>"Any typos or unclear parts?"</em></li>
+                <li>Review suggestions (don't blindly accept all)</li>
+                <li>Paste back and send</li>
+              </ol>
+              <p>Total time: 30 seconds. Peace of mind: Priceless.</p>
+            </div>
+
+            <div class="quiz-container">
+              <div class="quiz-question">What's the BEST way to use AI for email writing?</div>
+              <div class="quiz-options">
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q2')">
+                  <div class="option-marker">A</div>
+                  <span>Let AI write all your emails from scratch</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q2')">
+                  <div class="option-marker">B</div>
+                  <span>Never use AI because it's impersonal</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q2')" data-correct="true">
+                  <div class="option-marker">C</div>
+                  <span>Use AI as a proofreader and tone-checker while keeping your voice</span>
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, 'typo-q2')">
+                  <div class="option-marker">D</div>
+                  <span>Accept every AI suggestion without review</span>
+                </div>
+              </div>
+              <div class="quiz-feedback" id="typo-q2-feedback"></div>
+            </div>
+
+            <div class="module-nav">
+              <button class="nav-btn nav-btn-secondary" onclick="prevModule('typo')">← Previous</button>
+              <button class="nav-btn nav-btn-primary" onclick="nextModule('typo')">Next: Final Practice →</button>
+            </div>
+          `,
+          5: `
+            <div class="module-header">
+              <div class="module-breadcrumb">Module 5 of 5</div>
+              <h1 class="module-title">Final Practice & Reflection</h1>
+              <p class="module-subtitle">Recovering from typos with grace — and celebrating your growth.</p>
+            </div>
+
+            <div class="content-block">
+              <h3>The Art of the Recovery</h3>
+              <p>You sent an email with a typo. The world didn't end. But if you feel you must address it, here's how to do it with confidence:</p>
+            </div>
+
+            <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 2px solid var(--sage);">
+                <strong style="color: var(--sage);">Minor typo (their/there, teh/the)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">Don't send a correction. No one noticed. Move on with your life.</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 2px solid #c9b896;">
+                <strong style="color: #9a8a66;">Wrong name or important detail</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">Quick, light correction: "Oops — meant to say Tuesday, not Thursday!"</p>
+              </div>
+              <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-sm); border: 2px solid var(--dusty-pink);">
+                <strong style="color: var(--dusty-pink);">Major error (wrong attachment, wrong recipient)</strong>
+                <p style="margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem;">Address it directly, briefly, and move on: "Please disregard my previous email — here's the correct version."</p>
+              </div>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-title">The Golden Rule of Corrections</div>
+              <p>Match your correction energy to the error size. A novel-length apology for a minor typo makes things more awkward, not less.</p>
+            </div>
+
+            <div class="email-template" style="border-color: var(--sage); border-width: 2px;">
+              <div class="email-header" style="background: var(--sage-light);">
+                <div><strong>Good Recovery Example</strong></div>
+              </div>
+              <div class="email-body">
+                <p>Hi Team,</p>
+                <p>Quick correction: the meeting is at <strong>2pm</strong>, not 3pm as I wrote below. See you then!</p>
+                <p>— Jamie</p>
+              </div>
+            </div>
+
+            <div class="email-template" style="border-color: var(--dusty-pink); border-width: 2px; margin-top: 1rem;">
+              <div class="email-header" style="background: var(--dusty-pink-light);">
+                <div><strong>Over-apologizing (Don't do this)</strong></div>
+              </div>
+              <div class="email-body">
+                <p>Hi Team,</p>
+                <p>I am SO sorry for the confusion in my last email. I can't believe I wrote the wrong time — I've been so swamped lately and I should have double-checked. I hope this didn't cause any problems for anyone's schedule. I really need to be more careful. Anyway, the meeting is at 2pm. Again, I'm really sorry about this!</p>
+                <p>— Jamie</p>
+              </div>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Role Play: Write the Recovery</h4>
+              <p style="color: #6b5f8a; margin-bottom: 1rem;">Scenario: You sent an email to your manager saying you'd "love to discus the project" (typo: discus instead of discuss). What do you do?</p>
+              <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <button style="flex: 1; padding: 0.75rem; background: var(--sage); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 500; font-family: inherit;">Option A: Don't correct it</button>
+                <button style="flex: 1; padding: 0.75rem; background: white; color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-weight: 500; font-family: inherit;">Option B: Send a light correction</button>
+              </div>
+              <textarea placeholder="If you chose to send a correction, write it here. If you chose to let it go, explain your reasoning..."></textarea>
+            </div>
+
+            <div class="completion-screen" style="margin-top: 3rem;">
+              <div class="completion-icon">🎉</div>
+              <h2>You Did It!</h2>
+              <p>You've completed The Great Typo Panic. May your emails be clear, your typos be minor, and your send-button anxiety be forever reduced.</p>
+
+              <div class="completion-stats">
+                <div class="completion-stat">
+                  <div class="number">5</div>
+                  <div class="label">Modules Completed</div>
+                </div>
+                <div class="completion-stat">
+                  <div class="number">∞</div>
+                  <div class="label">Typos Forgiven</div>
+                </div>
+                <div class="completion-stat">
+                  <div class="number">1</div>
+                  <div class="label">New Framework</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius); margin-top: 2rem; border: 1px solid var(--border);">
+              <h3 style="text-align: center; margin-bottom: 1rem;">Key Takeaways</h3>
+              <ul style="max-width: 500px; margin: 0 auto; color: var(--text-light);">
+                <li>Most people don't notice typos as much as you think</li>
+                <li>Use the CLEAR framework for efficient emails</li>
+                <li>AI is your proofreading partner, not your ghostwriter</li>
+                <li>Match correction energy to error size</li>
+                <li>A sent email beats a perfect draft</li>
+              </ul>
+            </div>
+
+            <div class="reflection-box">
+              <h4>Final Reflection</h4>
+              <p style="color: #6b5f8a; margin-bottom: 1rem;">What's one thing you'll do differently when writing emails after this course?</p>
+              <textarea placeholder="I will..."></textarea>
+            </div>
+
+            <div style="text-align: center; padding: 2rem; margin-top: 2rem;">
+              <p style="font-style: italic; color: var(--text-light); margin-bottom: 1.5rem;">"Done is better than perfect. Sent is better than saved in drafts."</p>
+              <button class="nav-btn nav-btn-primary" onclick="goHome()">← Back to Course Library</button>
+            </div>
+          `
+        }
+      }
+    };
+
+    // ===== STATE =====
+    let currentCourse = null;
+    let currentModule = 1;
+    let timerInterval = null;
+    let timerSeconds = 30;
+    let timerRunning = false;
+
+    // ===== NAVIGATION =====
+    function openCourse(course) {
+      document.getElementById('homePage').classList.add('hidden');
+      document.getElementById(course + 'Course').classList.remove('hidden');
+      document.getElementById(course + 'Course').classList.add('fade-in');
+      currentCourse = course;
+      currentModule = 1;
+      loadModule(course, 1);
+      updateProgress(course);
+    }
+
+    function goHome() {
+      document.querySelectorAll('.course-player').forEach(el => el.classList.add('hidden'));
+      document.getElementById('homePage').classList.remove('hidden');
+      document.getElementById('homePage').classList.add('fade-in');
+      currentCourse = null;
+    }
+
+    function loadModule(course, moduleNum) {
+      const content = courseData[course].modules[moduleNum];
+      const contentEl = document.getElementById(course + 'Content');
+      contentEl.innerHTML = content;
+      contentEl.classList.add('fade-in');
+      currentModule = moduleNum;
+
+      document.querySelectorAll(`#${course}Course .nav-item`).forEach((item, index) => {
+        item.classList.remove('active');
+        if (index + 1 === moduleNum) item.classList.add('active');
+      });
+
+      if (moduleNum > 1 && !courseData[course].completed.includes(moduleNum - 1)) {
+        courseData[course].completed.push(moduleNum - 1);
+        updateProgress(course);
+      }
+
+      contentEl.scrollTop = 0;
+      window.scrollTo(0, 0);
+
+      // Re-initialize simulator if present
+      setTimeout(() => {
+        if (document.getElementById('promptPreview')) updatePromptPreview();
+      }, 100);
+    }
+
+    function nextModule(course) {
+      if (currentModule < courseData[course].totalModules) {
+        loadModule(course, currentModule + 1);
+      }
+    }
+
+    function prevModule(course) {
+      if (currentModule > 1) {
+        loadModule(course, currentModule - 1);
+      }
+    }
+
+    function updateProgress(course) {
+      const total = courseData[course].totalModules;
+      const completed = courseData[course].completed.length;
+      const percent = Math.round((completed / total) * 100);
+
+      document.getElementById(course + 'ProgressBar').style.width = percent + '%';
+      document.getElementById(course + 'ProgressText').textContent = percent + '%';
+
+      courseData[course].completed.forEach(modNum => {
+        const navItem = document.querySelector(`#${course}Course .nav-item[data-module="${course}-${modNum}"]`);
+        if (navItem) {
+          navItem.classList.add('completed');
+          navItem.querySelector('.nav-status').innerHTML = '✓';
+        }
+      });
+    }
+
+    // ===== QUIZ =====
+    function selectOption(element, quizId) {
+      const container = element.closest('.quiz-container');
+      const options = container.querySelectorAll('.quiz-option');
+      const feedback = document.getElementById(quizId + '-feedback');
+
+      options.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+      element.classList.add('selected');
+
+      const isCorrect = element.dataset.correct === 'true';
+
+      setTimeout(() => {
+        if (isCorrect) {
+          element.classList.add('correct');
+          feedback.className = 'quiz-feedback show correct';
+          feedback.innerHTML = 'That\'s right. Well done.';
+        } else {
+          element.classList.add('incorrect');
+          feedback.className = 'quiz-feedback show incorrect';
+          feedback.innerHTML = 'Not quite. Take another look at the options.';
+          options.forEach(opt => {
+            if (opt.dataset.correct === 'true') opt.classList.add('correct');
+          });
+        }
+      }, 300);
+    }
+
+    // ===== CHATBOT SIMULATOR =====
+    function updatePromptPreview() {
+      const toneValue = document.getElementById('toneSlider')?.value || 50;
+      const toggles = document.querySelectorAll('#chatbotSimulator .toggle-switch input');
+      const selectedChips = document.querySelectorAll('#responseChips .chip.selected');
+
+      let tone = toneValue < 33 ? 'professional and direct' : toneValue < 66 ? 'friendly and helpful' : 'warm and conversational';
+
+      let behaviors = [];
+      if (toggles[0]?.checked) behaviors.push('Always be honest when you don\'t know something.');
+      if (toggles[1]?.checked) behaviors.push('Offer to connect the customer with a human when needed.');
+      if (toggles[2]?.checked) behaviors.push('Use emojis sparingly (💚🌊✨).');
+      if (toggles[3]?.checked) behaviors.push('Stay focused on ThreadLab topics only.');
+
+      let styles = Array.from(selectedChips).map(c => c.textContent.toLowerCase()).join(' and ');
+
+      const prompt = `You are ThreadLab's shopping assistant. Your tone is ${tone}.
+
+${behaviors.join('\n')}
+
+Keep responses ${styles || 'helpful'}.
+
+If asked about complex styling, complaints, or medical concerns, politely offer to connect them with a human team member.`;
+
+      const preview = document.getElementById('promptPreview');
+      if (preview) preview.textContent = prompt;
+    }
+
+    function toggleChip(chip) {
+      const selected = document.querySelectorAll('#responseChips .chip.selected');
+      if (chip.classList.contains('selected')) {
+        chip.classList.remove('selected');
+      } else if (selected.length < 2) {
+        chip.classList.add('selected');
+      }
+      updatePromptPreview();
+    }
+
+    function copyPrompt() {
+      const prompt = document.getElementById('promptPreview')?.textContent;
+      if (prompt) {
+        navigator.clipboard.writeText(prompt);
+        const btn = document.querySelector('.btn-copy');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Prompt', 2000);
+      }
+    }
+
+    function resetSimulator() {
+      document.getElementById('toneSlider').value = 50;
+      document.querySelectorAll('#chatbotSimulator .toggle-switch input').forEach((t, i) => t.checked = i < 3);
+      document.querySelectorAll('#responseChips .chip').forEach((c, i) => c.classList.toggle('selected', i === 0 || i === 2));
+      updatePromptPreview();
+    }
+
+    // ===== PANIC METER =====
+    function setPanic(level, chip) {
+      document.getElementById('panicFill').style.width = level + '%';
+      document.querySelectorAll('.lab-content .chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+
+      const messages = {
+        20: 'Great! You feel comfortable with this email.',
+        45: 'Mild worry is normal. A quick re-read should help.',
+        70: 'This feeling is common. Try the CLEAR framework.',
+        95: 'Take a breath. Most typos go unnoticed.'
+      };
+      document.getElementById('panicFeedback').textContent = messages[level];
+    }
+
+    // ===== RESET TIMER =====
+    function toggleTimer() {
+      const btn = document.getElementById('timerBtn');
+      const display = document.getElementById('timerDisplay');
+      const message = document.getElementById('timerMessage');
+
+      const affirmations = [
+        'Breathe in... breathe out...',
+        'Your email is good enough.',
+        'One re-read is enough.',
+        'Trust yourself.',
+        'Almost there...'
+      ];
+
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        btn.textContent = 'Start';
+        btn.classList.remove('running');
+        timerSeconds = 30;
+        display.textContent = '0:30';
+        message.textContent = 'Press start to begin your reset';
+      } else {
+        timerRunning = true;
+        btn.textContent = 'Stop';
+        btn.classList.add('running');
+
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          display.textContent = `0:${timerSeconds.toString().padStart(2, '0')}`;
+          message.textContent = affirmations[Math.floor((30 - timerSeconds) / 6)] || affirmations[4];
+
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            btn.textContent = 'Done';
+            btn.classList.remove('running');
+            display.textContent = '✓';
+            message.textContent = 'You\'re ready. Hit send.';
+            setTimeout(() => {
+              timerSeconds = 30;
+              display.textContent = '0:30';
+              btn.textContent = 'Start';
+              message.textContent = 'Press start to begin your reset';
+            }, 3000);
+          }
+        }, 1000);
+      }
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('%cmicrolearning courses', 'font-size: 20px; color: #9cb4a0; font-weight: 300;');
+      console.log('%cbuilt for fun.', 'font-size: 14px; color: #b2bec3;');
+    });
+  </script>
+</body>
+</html>
